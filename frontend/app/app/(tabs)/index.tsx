@@ -1,98 +1,70 @@
 import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
-
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
 import { Link } from 'expo-router';
+import { SafeAreaView, Text, View } from 'react-native';
 
 export default function HomeScreen() {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
+    <SafeAreaView className='flex-1 bg-slate-950'>
+      <View className='flex-1 px-6 py-8 justify-between'>
+        <View className='space-y-8'>
+          <View className='items-center'>
+            <View className='h-28 w-28 rounded-full bg-cyan-500/15 items-center justify-center'>
+              <Image
+                source={require('@/assets/images/splash-icon.png')}
+                className='h-16 w-16'
               />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+            </View>
+          </View>
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+          <View className='space-y-4'>
+            <Text className='text-4xl font-bold text-white'>Asondia</Text>
+            <Text className='text-base text-slate-300'>
+              Smart bus operations for routes, drivers and riders in one place.
+            </Text>
+          </View>
+
+          <View className='rounded-3xl border border-white/10 bg-white/5 p-5 space-y-4'>
+            <Text className='text-xs uppercase tracking-[0.35em] text-cyan-300'>
+              Key features
+            </Text>
+            <View className='space-y-3'>
+              <View className='flex-row items-start gap-3'>
+                <View className='mt-1 h-2.5 w-2.5 rounded-full bg-cyan-400' />
+                <Text className='text-sm text-slate-200'>
+                  Live trips and route status.
+                </Text>
+              </View>
+              <View className='flex-row items-start gap-3'>
+                <View className='mt-1 h-2.5 w-2.5 rounded-full bg-cyan-400' />
+                <Text className='text-sm text-slate-200'>
+                  Driver and schedule management.
+                </Text>
+              </View>
+              <View className='flex-row items-start gap-3'>
+                <View className='mt-1 h-2.5 w-2.5 rounded-full bg-cyan-400' />
+                <Text className='text-sm text-slate-200'>
+                  Secure access for staff and riders.
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+
+        <View className='space-y-4'>
+          <Link href='/modal'>
+            <Link.Trigger>
+              <View className='rounded-3xl bg-cyan-500 px-6 py-4 shadow-lg shadow-cyan-500/20'>
+                <Text className='text-center text-base font-semibold text-slate-950'>
+                  Get started
+                </Text>
+              </View>
+            </Link.Trigger>
+          </Link>
+          <Text className='text-center text-sm text-slate-500'>
+            Auth flows are ready to build next. Tap continue to keep going.
+          </Text>
+        </View>
+      </View>
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
