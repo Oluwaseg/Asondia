@@ -1,0 +1,106 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  PASSENGER
+  CONDUCTOR
+  ADMIN
+}
+
+enum TripStatus {
+  SCHEDULED
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum ReservationStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(PASSENGER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tripsAsConductor Trip[]
+  reservations     Reservation[]
+}
+
+model Bus {
+  id          String   @id @default(cuid())
+  busNumber   String
+  plateNumber String   @unique
+  cooperative String   @default("AMOEC MPC")
+  capacity    Int      @default(45)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  trips Trip[]
+}
+
+model Trip {
+  id                String     @id @default(cuid())
+  busId             String
+  conductorId       String
+  routeStart        String
+  routeEnd          String
+  status            TripStatus @default(ACTIVE)
+  currentLat        Float?
+  currentLng        Float?
+  locationUpdatedAt DateTime?
+  availableSeats    Int
+  startedAt         DateTime   @default(now())
+  endedAt           DateTime?
+
+  bus          Bus           @relation(fields: [busId], references: [id])
+  conductor    User          @relation(fields: [conductorId], references: [id])
+  reservations Reservation[]
+  locations    LocationHistory[]
+
+  @@index([status])
+  @@index([routeStart, routeEnd])
+}
+
+model Reservation {
+  id            String            @id @default(cuid())
+  tripId        String
+  passengerId   String?
+  passengerName String
+  phone         String
+  pickupPoint   String
+  status        ReservationStatus @default(PENDING)
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  trip      Trip  @relation(fields: [tripId], references: [id])
+  passenger User? @relation(fields: [passengerId], references: [id])
+
+  @@index([tripId])
+}
+
+model LocationHistory {
+  id         String   @id @default(cuid())
+  tripId     String
+  lat        Float
+  lng        Float
+  recordedAt DateTime @default(now())
+
+  trip Trip @relation(fields: [tripId], references: [id])
+
+  @@index([tripId, recordedAt])
+}
